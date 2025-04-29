@@ -25,3 +25,4 @@ def circular_array(n):
 
 
 print(*circular_array(input().split()), sep='')
+
