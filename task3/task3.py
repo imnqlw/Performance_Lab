@@ -1,50 +1,39 @@
 import json
-import tempfile
-import os
 
-file = 'E:/proect/НТ Performance Lab/task3/value.json'
-bile = 'E:/proect/НТ Performance Lab/task3/test.json'
+file = input()
+#task3/value.json
+bile = input()
+#task3/test.json
+report = input()
+#task3/report.json
 
-# with open(file, 'r', encoding='utf-8') as f:
-#     val = json.load(f)
-#
-# with open(bile, 'r', encoding='utf-8') as f:
-#     tes = json.load(f)
-#     # print(tes['tests'][0]['value'])
+with open(file, 'r', encoding='utf-8') as f:
+    val = json.load(f)
 
+with open(bile, 'r', encoding='utf-8') as f:
+    tes = json.load(f)
 
-# def make_report(baza):
-#     for i in range(2):
-#         report = tes['tests'][i]
-#         for key, value in report.items():
-#             if key == 'id':
-#                 for i in range(2):
-#                     va = val['values'][i]
-#                     with open("E:/proect/НТ Performance Lab/task3/report.json", "rb+", encoding="utf-8") as bile:
-#
-#
-#                     report['value'] = va['value']
-#     return report
-#
-#
-# s = make_report(tes)
-#
-# with open("E:/proect/НТ Performance Lab/task3/report.json", "rb+", encoding="utf-8") as ile:
-#
-#     f.seek()
-#     f.write()
+values_list = val.get("values", [])
 
-with open(bile) as json_file:
-    json_data = json.load(json_file)
-
-    values = json_data['tests']
-    for value in values:
-        value['value'] = 'right'
-    valus = json_data['tests']['values']
-    for value in valus:
-        value['value'] = 'right'
+values_dict = {item.get("id"): item.get("value") for item in values_list}
 
 
+def fill_values(tes, values_dict):
+    test_id = tes.get("id")
+    if test_id is not None and test_id in values_dict:
+        tes["value"] = values_dict[test_id]
 
-with open('report.json', "w") as f:
-    json.dump(json_data, f)
+
+    if "values" in tes and isinstance(tes["values"], list):
+        for item in tes["values"]:
+            fill_values(item, values_dict)
+
+
+tests_list = tes.get("tests", [])
+for test in tests_list:
+    fill_values(test, values_dict)
+
+
+with open('report.json', 'w', encoding='utf-8') as f:
+    json.dump(tes, f, indent=4, ensure_ascii=False)
+
