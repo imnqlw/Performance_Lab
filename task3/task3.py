@@ -1,12 +1,15 @@
 import json
 
-file = input()
-#task3/value.json
-bile = input()
-#task3/test.json
-report = input()
-#task3/report.json
+def full_path(file, bile, report):
+    return file, bile, report
 
+file = input()
+# #task3/value.json
+bile = input()
+# #task3/test.json
+report = input()
+# #task3/report.json
+main=full_path(file, bile, report)
 with open(file, 'r', encoding='utf-8') as f:
     val = json.load(f)
 
