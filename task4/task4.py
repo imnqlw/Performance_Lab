@@ -1,28 +1,27 @@
+import sys
+
+
 def one_number(m):
-    p=m
-    b=0
-    y=sum(m)/len(m)
-    while min(p)<y:
-        t = p.index(min(p))
-        p[t]=p[t]+1
-        b += 1
-    else:
-        while max(p)>min(p):
-            c = p.index(max(p))
-            p[c]=p[c]-1
-            b+=1
-    return b
+    m.sort()
+    median_index = len(m) // 2
+    median = m[median_index]
+    count = 0
+    for num in m:
+        count += abs(num - median)
 
-def num(x):
-    x = int(x)
-    return x
+    return count
 
-numbers=open(input(), 'r')
-m=[]
 
-while True:
-    line = numbers.readline()
-    if not line:
-        break
-    m.append(num(line))
-print(one_number(m))
+def read_numbers_from_file(args):
+    numbers = open(args, 'r')
+    m = []
+    for line in numbers:
+        m.append(int(line.strip()))
+    return m
+
+
+if __name__ == '__main__':
+    numbers = sys.argv[1]
+    num = read_numbers_from_file(numbers)
+    result = one_number(num)
+    print(result)

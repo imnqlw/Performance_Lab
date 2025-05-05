@@ -1,24 +1,7 @@
 import json
+import sys
 
-def full_path(file, bile, report):
-    return file, bile, report
 
-file = input()
-# #task3/value.json
-bile = input()
-# #task3/test.json
-report = input()
-# #task3/report.json
-main=full_path(file, bile, report)
-with open(file, 'r', encoding='utf-8') as f:
-    val = json.load(f)
-
-with open(bile, 'r', encoding='utf-8') as f:
-    tes = json.load(f)
-
-values_list = val.get("values", [])
-
-values_dict = {item.get("id"): item.get("value") for item in values_list}
 
 
 def fill_values(tes, values_dict):
@@ -32,11 +15,32 @@ def fill_values(tes, values_dict):
             fill_values(item, values_dict)
 
 
-tests_list = tes.get("tests", [])
-for test in tests_list:
-    fill_values(test, values_dict)
 
 
-with open('report.json', 'w', encoding='utf-8') as f:
-    json.dump(tes, f, indent=4, ensure_ascii=False)
+def generate_report(values_file, tests_file, report_file):
+    with open(values_file, 'r', encoding='utf-8') as f:
+        val = json.load(f)
 
+    with open(tests_file, 'r', encoding='utf-8') as f:
+        tes = json.load(f)
+
+    values_list = val.get("values", [])
+
+    values_dict = {item.get("id"): item.get("value") for item in values_list}
+    tests_list = tes.get("tests", [])
+    for test in tests_list:
+        fill_values(test, values_dict)
+
+    with open(report_file, 'w', encoding='utf-8') as f:
+        json.dump(tes, f, indent=4, ensure_ascii=False)
+
+
+
+
+
+if __name__ == '__main__':
+    values_file = sys.argv[1]
+    tests_file = sys.argv[2]
+    report_file = sys.argv[3]
+
+    generate_report(values_file, tests_file, report_file)
